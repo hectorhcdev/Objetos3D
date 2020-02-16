@@ -18,6 +18,7 @@ void setup(){
 void draw(){
   background(0);
   if(create){
+    
     obj=createShape();
     obj.beginShape();
     obj.fill(255,144,0);
@@ -27,12 +28,33 @@ void draw(){
     for(float [] coordenada:puntos){
       obj.vertex(coordenada[0],coordenada[1],coordenada[2]);
     }
-    obj.vertex(mouseX,mouseY,0);
+    if(mouseX<width/2){
+      obj.vertex(width/2,mouseY,0);
+    }else{
+      obj.vertex(mouseX,mouseY,0);
+    }
+    
     obj.vertex(width/2,height,0);
     obj.vertex(width/2,0,0);
     obj.endShape();
     translate(0,0);
     shape(obj);
+    fill(0);
+    stroke(255);
+    rect(10,10,width/2-25,height-20);
+    fill(255);
+    textSize(30);
+    text("INSTRUCCIONES",width/4-110,50);
+    textSize(20);
+    text("-Para añadir puntos pulsar clic\n  izq del ratón",40,80);
+    textSize(20);
+    text("-Para crear objeto 3d pulsar la\n  tecla ENTER",40,140);
+    textSize(20);
+    text("-Una vez creado el objeto 3d\n  pulsar ENTER para volver a\n  crear un objeto nuevo",40,200);
+    textSize(20);
+    text("-Una vez creado el objeto 3d\n  pulsar W para avanzar en la\n  creacion de objeto",40,290);
+    textSize(20);
+    text("-Una vez creado el objeto 3d\n  pulsar S para retroceder en\n  la creacion de objeto",40,380);
   }else{
     
     obj=createShape();
@@ -48,7 +70,9 @@ void draw(){
     translate(mouseX-width/2,mouseY-height/2);
     shape(obj);
     rotate=true;
+    textSize(15);
     
+    text("Para crear objeto\n nuevo pulsar ENTER",40,380,0);
   }
   
 }
@@ -83,7 +107,7 @@ void rotar(ArrayList <float []> lista){
       }
       
       primero=false;
-      if(countlist>countX){
+      if(countlist>=countX){
         break;
       }
       
@@ -92,10 +116,20 @@ void rotar(ArrayList <float []> lista){
   
 }
 
+void mouseClicked(){
+  if(create){
+    if(mouseX<width/2){
+       puntos.add(new float [] {width/2,mouseY,0});
+    }else{
+      puntos.add(new float [] {mouseX,mouseY,0});
+    }
+    
+  }
+}
 
 void keyPressed(){
   if(key==' ' && create){
-    puntos.add(new float [] {mouseX,mouseY,0});
+    //puntos.add(new float [] {mouseX,mouseY,0});
   }
    
  if(keyCode==ENTER && !create){
@@ -106,12 +140,23 @@ void keyPressed(){
    puntos.add(new float [] {width/2,height,0});
    puntos.add(new float [] {width/2,0,0});
    create=false;
+   countX=puntos.size()*8;
  }
 
- if(key=='w'){
-   countX+=puntos.size();
+ if(key=='w' && !create){
+   if(countX>=puntos.size()*8){
+     countX=puntos.size()*8;
+   }else{
+     countX+=puntos.size();
+   }
+   
  }
- if(key=='s'){
-   countX-=puntos.size();
+ if(key=='s' && !create){
+   if(countX==0){
+     countX=0;
+   }else{
+     countX-=puntos.size();
+   }
+   
  }
 }
