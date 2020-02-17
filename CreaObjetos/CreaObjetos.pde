@@ -4,13 +4,20 @@ ArrayList <float []> puntos;
 int countX, countY;
 boolean create,primero;
 boolean rotate;
+boolean [] keys;
+float rotation,rotationValue;
 void setup(){
   size(750,500,P3D);
+  rotation=0;
   create=true;
   rotate=false;
   puntos = new ArrayList();
   countX=0;
   countY=0;
+  rotationValue=0.01;
+  keys= new boolean [3];
+  keys[0]=false;
+  keys[1]=false;
   primero=true;
   puntos.add(new float [] {width/2,0,0});
 }
@@ -18,7 +25,7 @@ void setup(){
 void draw(){
   background(0);
   if(create){
-    
+    rotation=0;
     obj=createShape();
     obj.beginShape();
     obj.fill(255,144,0);
@@ -67,12 +74,31 @@ void draw(){
     rotar((ArrayList <float []>)puntos.clone());
     obj.endShape();
     
-    translate(mouseX-width/2,mouseY-height/2);
-    shape(obj);
-    rotate=true;
-    textSize(15);
     
-    text("Para crear objeto\n nuevo pulsar ENTER",40,380,0);
+    translate(mouseX,mouseY-height/2,-200);
+    rotateY(rotation);
+    shape(obj);
+    if(keys[0]){
+      if(rotationValue>=1){
+        rotationValue=1;
+      }else{
+        rotationValue+=0.01;
+      }
+      
+    }
+    if(keys[1]){
+      if (rotationValue<=-1){
+        rotationValue=-1;
+      }else{
+        rotationValue-=0.01;
+      }
+      
+    }
+    rotation+=rotationValue;
+    rotate=true;
+    //textSize(15);
+    
+    //text("Para crear objeto\n nuevo pulsar ENTER",40,380,0);
   }
   
 }
@@ -96,12 +122,12 @@ void rotar(ArrayList <float []> lista){
         a[1]=aux[1];
         a[2]=-(aux[0])*sin(i)+aux[2]*cos(i);
         if(primero){
-          lista2.add(new float[]{a[0]+width/2,a[1],a[2]-200});
+          lista2.add(new float[]{a[0],a[1],a[2]});
         }else{
           float [] b= lista2.get(countlist).clone();
           obj.vertex(b[0],b[1],b[2]);
-          obj.vertex(a[0]+width/2,a[1],a[2]-200);
-          lista2.add(new float[]{a[0]+width/2,a[1],a[2]-200});
+          obj.vertex(a[0],a[1],a[2]);
+          lista2.add(new float[]{a[0],a[1],a[2]});
           countlist++;
         }
       }
@@ -126,9 +152,24 @@ void mouseClicked(){
     
   }
 }
+void keyReleased(){
+  if(key=='+' && !create){
+     keys[0]=false;
+    //puntos.add(new float [] {mouseX,mouseY,0});
+  }
+  if(key=='-' && !create){
+     keys[1]=false;
+    //puntos.add(new float [] {mouseX,mouseY,0});
+  }
+}
 
 void keyPressed(){
-  if(key==' ' && create){
+  if(key=='+' && !create){
+     keys[0]=true;
+    //puntos.add(new float [] {mouseX,mouseY,0});
+  }
+  if(key=='-' && !create){
+     keys[1]=true;
     //puntos.add(new float [] {mouseX,mouseY,0});
   }
    
