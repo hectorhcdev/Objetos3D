@@ -13,7 +13,7 @@ En esta segunda práctica se ha compuesto una aplicación mediante **processing3
 
 ## Demo
 
-![](.\CreaObjetos\demo.gif)
+![](demo.gif)
 
 En la demo se puede apreciar el menú de creación y la visualización de dicho objeto. En dicha visualización se puede observar la figura rotar sobre si misma y las funcionalidades añadidas.
 
